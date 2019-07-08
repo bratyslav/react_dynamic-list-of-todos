@@ -1,6 +1,5 @@
 import React from 'react';
 import TodoItem from './TodoItem';
-import { users } from './users';
 
 const TodoList = (props) => {
   const sortedFunc = (firstTodo, secondTodo) => {
