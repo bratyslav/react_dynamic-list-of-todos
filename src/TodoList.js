@@ -1,38 +1,28 @@
 import React from 'react';
 import TodoItem from './TodoItem';
-import { todos } from './todos';
+import { users } from './users';
 
-class TodoList extends React.Component  {
-  state = {
-    sorted: false
+const TodoList = (props) => {
+  const sortedFunc = (firstTodo, secondTodo) => {
+    switch (props.sortedBy) {
+      case 'user':
+        const firstUser = props.users.find(user => user.id === firstTodo.userId);
+        const secondUser = props.users.find(user => user.id === secondTodo.userId);
+        const userArr = [firstUser.name, secondUser.name].sort();
+        if (userArr[0] === firstUser.name) return -1;
+        return 1;
+      case 'todo':
+        const todoArr = [firstTodo.title, secondTodo.title].sort();
+        if (todoArr[0] === firstTodo.title) return -1;
+        return 1;
+      case 'state':
+        return firstTodo.completed - secondTodo.completed;
+    }
   }
 
-  render() {
-    return (
-      <div>
-        <ul>
-          {
-            this.state.sorted
-            ? todos
-                .filter(todo => todo.userId === this.props.person.id)
-                .sort((x, y) => Number(y.completed) - Number(x.completed))
-                .map(todo => <TodoItem todo={todo} />)
-            : todos
-                .filter(todo => todo.userId === this.props.person.id)
-                .map(todo => <TodoItem todo={todo} />)
-          }
-        </ul>
-        <div className="button-sort__container">
-          <button
-            onClick={() => this.setState({ sorted: true })}
-            className="button-sort"
-          >
-            Sort
-          </button>
-        </div>
-      </div>
-    );
-  }
+  return props.todos
+    .sort(sortedFunc)
+    .map(todo => <TodoItem todo={todo} users={props.users} key={todo.id} />);
 }
 
 export default TodoList;

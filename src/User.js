@@ -1,13 +1,9 @@
 import React from 'react';
 
-function User({person}) {
-  return (
-    <div className="user__container">
-      <span className="user">
-        {person.name}
-      </span>
-    </div>
-  )
-}
+const User = (props) => (
+  <td>
+    {props.user.name}
+  </td>
+);
 
 export default User;
