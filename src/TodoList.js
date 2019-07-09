@@ -1,26 +1,62 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 
-const TodoList = (props) => {
-  const visibleTodos = [...props.todos];
-  // чтобы исключить мутации загруженных данных
+class TodoList extends React.Component {
+  state = {
+    sortedTodos: [],
+    // кэш
+    sortByUsers: [],
+    sortByTodos: [],
+    sortByState: []
+  };
 
-  const sortingFunc = (firstTodo, secondTodo) => {
-    switch (props.sortedBy) {
+  sortingFunc = (firstTodo, secondTodo) => {
+    switch (this.props.sortedBy) {
       case 'user':
-        const firstUser = props.users.find(user => user.id === firstTodo.userId);
-        const secondUser = props.users.find(user => user.id === secondTodo.userId);
+        const firstUser = this.props.users.find(user => user.id === firstTodo.userId);
+        const secondUser = this.props.users.find(user => user.id === secondTodo.userId);
         return firstUser.name.localeCompare(secondUser.name);
       case 'todo':
         return firstTodo.title.localeCompare(secondTodo.title);
       case 'state':
         return firstTodo.completed - secondTodo.completed;
+    };
+  };
+
+  getSortedTodos = (array) => {
+    switch (this.props.sortedBy) {
+      case 'user':
+        if (this.state.sortByUsers.length === 0) { // если нет в кэше
+          this.setState({ sortByUsers: [...array.sort(this.sortingFunc)] });
+          return this.state.sortByUsers;
+        }
+        // если есть в кэше
+        return this.state.sortByUsers;
+      case 'todo':
+        if (this.state.sortByTodos.length === 0) { // если нет в кэше
+          this.setState({ sortByTodos: [...array.sort(this.sortingFunc)] });
+          return this.state.sortByTodos;
+        }
+        // если есть в кэше
+        return this.state.sortByTodos;
+      case 'state':
+        if (this.state.sortByState.length === 0) { // если нет в кэше
+          this.setState({ sortByState: [...array.sort(this.sortingFunc)] });
+          return this.state.sortByTodos;
+        }
+        // если есть в кэше
+        return this.state.sortByState;
+      default:
+        return [...array];
     }
   }
 
-  return visibleTodos
-    .sort(sortingFunc)
-    .map(todo => <TodoItem todo={todo} users={props.users} key={todo.id} />);
-}
+  render() {
+    return (
+      this.getSortedTodos(this.props.todos)
+      .map(todo => <TodoItem todo={todo} users={this.props.users} key={todo.id} />)
+    );  
+  };
+};
 
 export default TodoList;
