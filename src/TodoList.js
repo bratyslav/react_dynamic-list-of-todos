@@ -2,6 +2,9 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 const TodoList = (props) => {
+  const visibleTodos = [...props.todos];
+  // чтобы исключить мутации загруженных данных
+
   const sortingFunc = (firstTodo, secondTodo) => {
     switch (props.sortedBy) {
       case 'user':
@@ -15,7 +18,7 @@ const TodoList = (props) => {
     }
   }
 
-  return props.todos
+  return visibleTodos
     .sort(sortingFunc)
     .map(todo => <TodoItem todo={todo} users={props.users} key={todo.id} />);
 }
