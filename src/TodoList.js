@@ -42,7 +42,7 @@ class TodoList extends React.Component {
       case 'state':
         if (this.state.sortByState.length === 0) { // если нет в кэше
           this.setState({ sortByState: [...array.sort(this.sortingFunc)] });
-          return this.state.sortByTodos;
+          return this.state.sortByState;
         }
         // если есть в кэше
         return this.state.sortByState;
