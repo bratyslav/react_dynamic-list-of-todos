@@ -2,25 +2,21 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 const TodoList = (props) => {
-  const sortedFunc = (firstTodo, secondTodo) => {
+  const sortingFunc = (firstTodo, secondTodo) => {
     switch (props.sortedBy) {
       case 'user':
         const firstUser = props.users.find(user => user.id === firstTodo.userId);
         const secondUser = props.users.find(user => user.id === secondTodo.userId);
-        const userArr = [firstUser.name, secondUser.name].sort();
-        if (userArr[0] === firstUser.name) return -1;
-        return 1;
+        return firstUser.name.localeCompare(secondUser.name);
       case 'todo':
-        const todoArr = [firstTodo.title, secondTodo.title].sort();
-        if (todoArr[0] === firstTodo.title) return -1;
-        return 1;
+        return firstTodo.title.localeCompare(secondTodo.title);
       case 'state':
         return firstTodo.completed - secondTodo.completed;
     }
   }
 
   return props.todos
-    .sort(sortedFunc)
+    .sort(sortingFunc)
     .map(todo => <TodoItem todo={todo} users={props.users} key={todo.id} />);
 }
 
