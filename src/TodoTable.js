@@ -6,8 +6,9 @@ class TodoTable extends React.Component  {
     sortedBy: ''
   };
 
-
   render() {
+    const {todos, users} = this.props;
+
     return (
       <table className="todo-table">
         <thead>
@@ -56,7 +57,7 @@ class TodoTable extends React.Component  {
           </tr>
         </thead>
         <tbody>
-          <TodoList todos={this.props.todos} users={this.props.users} sortedBy={this.state.sortedBy} />
+          <TodoList todos={todos} users={users} sortedBy={this.state.sortedBy} />
         </tbody>
       </table>
     );

@@ -1,11 +1,11 @@
 import React from 'react';
 import User from './User';
 
-const TodoItem = (props) => (
+const TodoItem = ({todo, users}) => (
   <tr>
-    <User user={props.users.find(user => user.id === props.todo.userId)} />
-    <td>{props.todo.title}</td>
-    <td>{props.todo.completed ? 'completed' : 'active'}</td>
+    <User user={users.find(user => user.id === todo.userId)} />
+    <td>{todo.title}</td>
+    <td>{todo.completed ? 'completed' : 'active'}</td>
   </tr>
 );
 

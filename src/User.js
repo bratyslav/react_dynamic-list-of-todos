@@ -1,8 +1,8 @@
 import React from 'react';
 
-const User = (props) => (
+const User = ({user}) => (
   <td>
-    {props.user.name}
+    {user.name}
   </td>
 );
 

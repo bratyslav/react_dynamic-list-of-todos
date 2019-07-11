@@ -9,7 +9,7 @@ class App extends React.Component {
     loaded: false,
   }
 
-  isLoading = () => {
+  loadData = () => {
     this.setState({ loading: true });
     
     fetch('https://jsonplaceholder.typicode.com/todos')
@@ -20,25 +20,27 @@ class App extends React.Component {
         this.setState({ todos: data });
       })
 
-      fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          this.setState({ users: data });
-        })
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        this.setState({ users: data });
+      })
       .then(() => this.setState({ loaded: true }));
-  }
+}
 
   render() {
+    const {todos, users, loading, loaded} = this.state;
+
     return (
-      this.state.loaded
-      ? <TodoTable todos={this.state.todos} users={this.state.users} />
+      loaded
+      ? <TodoTable todos={todos} users={users} />
       : <button
-          onClick={this.isLoading}
+          onClick={this.loadData}
           className="button-load"
         >
-          {this.state.loading ? 'Loading...' : 'Load'}
+          {loading ? 'Loading...' : 'Load'}
         </button> 
     );
   }
