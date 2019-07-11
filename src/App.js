@@ -1,5 +1,7 @@
 import React from 'react';
 import TodoTable from './TodoTable';
+import { loadTodos } from './loadData';
+import { loadUsers } from './loadData';
 
 class App extends React.Component {
   state = {
@@ -12,23 +14,17 @@ class App extends React.Component {
   loadData = () => {
     this.setState({ loading: true });
     
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(response => {
-        return response.json();
-      })
+    loadTodos()
       .then(data => {
         this.setState({ todos: data });
       })
 
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => {
-        return response.json();
-      })
+    loadUsers()
       .then(data => {
         this.setState({ users: data });
       })
       .then(() => this.setState({ loaded: true }));
-}
+  }
 
   render() {
     const {todos, users, loading, loaded} = this.state;
