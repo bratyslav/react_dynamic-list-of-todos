@@ -3,10 +3,9 @@ import TodoItem from './TodoItem';
 
 const TodoList = ({todos, users, sortedBy}) => {
   const visibleTodos = [...todos];
-  // чтобы исключить мутации загруженных данных
 
   const sortingFunc = (firstTodo, secondTodo) => {
-    switch (sortedBy) {
+    switch (sortedBy.attribute) {
       case 'user':
         const firstUser = users.find(user => user.id === firstTodo.userId);
         const secondUser = users.find(user => user.id === secondTodo.userId);
@@ -18,9 +17,14 @@ const TodoList = ({todos, users, sortedBy}) => {
     }
   }
 
-  return visibleTodos
-    .sort(sortingFunc)
-    .map(todo => <TodoItem todo={todo} users={users} key={todo.id} />);
+  return sortedBy.wasSorted
+  ? visibleTodos
+      .sort(sortingFunc)
+      .reverse()
+      .map(todo => <TodoItem todo={todo} users={users} key={todo.id} />)
+  : visibleTodos
+      .sort(sortingFunc)
+      .map(todo => <TodoItem todo={todo} users={users} key={todo.id} />)
 }
 
 export default TodoList;
