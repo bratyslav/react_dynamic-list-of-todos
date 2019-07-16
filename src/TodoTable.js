@@ -7,13 +7,7 @@ class TodoTable extends React.Component  {
   };
 
   setSortDirection = (attribute) => this.setState((prev) => {
-    if (!prev.sortedBy.attribute) {
-      return {
-        sortedBy: { attribute: attribute, wasSorted: false }
-      };  
-    };
-
-    if (prev.sortedBy.attribute !== attribute) {
+    if (!prev.sortedBy.attribute || prev.sortedBy.attribute !== attribute) {
       return {
         sortedBy: { attribute: attribute, wasSorted: false }
       };
