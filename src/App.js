@@ -1,44 +1,43 @@
-import React from 'react';
-import TodoTable from './TodoTable';
-import { loadTodos } from './loadData';
-import { loadUsers } from './loadData';
+import React, { Component } from 'react';
+import './App.css';
+import { getData } from './getData';
+import TodoList from './TodoList';
 
-class App extends React.Component {
+class App extends Component {
   state = {
-    todos: [],
-    users: [],
-    loading: false,
-    loaded: false,
-  }
+    todoList: [],
+    requested: false,
+    loaded: false
+  };
 
-  loadData = () => {
-    this.setState({ loading: true });
-    
-    loadTodos()
-      .then(data => {
-        this.setState({ todos: data });
-      })
+  setData = async () => {
+    this.setState({ requested: true });
 
-    loadUsers()
-      .then(data => {
-        this.setState({ users: data });
-      })
-      .then(() => this.setState({ loaded: true }));
+    const todoList = await getData();
+
+    this.setState({
+      todoList: todoList,
+      loaded: true
+    });
   }
 
   render() {
-    const {todos, users, loading, loaded} = this.state;
+    const { requested, loaded, todoList } = this.state;
 
     return (
-      loaded
-      ? <TodoTable todos={todos} users={users} />
-      : <button
-          onClick={this.loadData}
-          className="button-load"
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : 'Load'}
-        </button> 
+      <div>
+        {
+          loaded
+          ? <TodoList todos={todoList} />
+          : <button
+            className="load-button"
+            onClick={this.setData}
+            disabled={requested}
+          >
+            {requested ? 'Loading...' : 'Load'}
+          </button>
+        }
+      </div>
     );
   }
 }

@@ -1,40 +1,98 @@
 import React from 'react';
-import TodoItem from './TodoItem';
 import PropTypes from 'prop-types';
 
+const getTodoList = (todos) => {
+  return todos.map(todo => {
+    const { user, task, state } = todo;
 
-const TodoList = ({ data, sortedBy }) => {
-  const { users, todos } = data;
-  const visibleTodos = [...todos];
+    return (
+      <tr key={task}>
+        <td>{user}</td>
+        <td>{task}</td>
+        <td>{state ? 'completed' : 'not completed'}</td>
+      </tr>
+    )
+  })
+};
 
-  const sortingFunc = (firstTodo, secondTodo) => {
-    switch (sortedBy.attribute) {
-      case 'user':
-        const firstUser = users.find(user => user.id === firstTodo.userId);
-        const secondUser = users.find(user => user.id === secondTodo.userId);
-        return firstUser.name.localeCompare(secondUser.name);
-      case 'todo':
-        return firstTodo.title.localeCompare(secondTodo.title);
-      case 'state':
-        return firstTodo.completed - secondTodo.completed;
-      default:
-        break;
+class TodoList extends React.Component {
+  state = {
+    visibleTodos: [...this.props.todos],
+    sortAttribute: ''
+  };
+
+  getSortedTodos = (attribute) => {
+    const { todos } = this.props;
+    const { sortAttribute } = this.state;
+
+    if (sortAttribute === attribute) {
+      this.setState((prevState) => ({
+        visibleTodos: prevState.visibleTodos.reverse()
+      }));
+    } else {
+      this.setState({
+        sortAttribute: attribute
+      })
+  
+      switch (attribute) {
+        case 'user':
+        case 'task':
+          this.setState({
+            visibleTodos: todos.sort((a, b) => (
+              a[attribute].localeCompare(b[attribute])
+            ))
+          });
+          break;
+  
+        case 'state':
+          this.setState({
+            visibleTodos: todos.sort((a, b) => (
+              b[attribute] - a[attribute]
+            ))
+          });
+          break;
+  
+        default:
+          break;  
+      };
     }
-  }
+  };
 
-  return sortedBy.wasSorted
-  ? visibleTodos
-      .sort(sortingFunc)
-      .reverse()
-      .map(todo => <TodoItem todo={todo} users={users} key={todo.id} />)
-  : visibleTodos
-      .sort(sortingFunc)
-      .map(todo => <TodoItem todo={todo} users={users} key={todo.id} />)
+  render() {
+    const { visibleTodos } = this.state;
+
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <th
+              onClick={() => this.getSortedTodos('user')}
+            >
+              User
+            </th>
+
+            <th
+              onClick={() => this.getSortedTodos('task')}
+            >
+              Todo
+            </th>
+
+            <th
+              onClick={() => this.getSortedTodos('state')}
+            >
+              State
+            </th>
+          </tr>
+
+          {getTodoList(visibleTodos)}
+        </tbody>  
+      </table>
+    );
+  };
 };
 
 TodoList.propTypes = {
-  data: PropTypes.object.isRequired,
-  sortedBy: PropTypes.object.isRequired
+  todos: PropTypes.array.isRequired
 };
 
 export default TodoList;
