@@ -15,9 +15,9 @@ body {
   font-weight: bold;
   background-color: aqua;
 
-  display: flex;
-  justify-content: space-between;
+
   min-width: 100px;
+  cursor: pointer;
 }
 
 .button-load {

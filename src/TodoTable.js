@@ -1,5 +1,6 @@
 import React from 'react';
 import TodoList from './TodoList';
+import PropTypes from 'prop-types';
 
 class TodoTable extends React.Component  {
   state = {
@@ -19,63 +20,44 @@ class TodoTable extends React.Component  {
   });
 
   render() {
-    const {todos, users} = this.props;
-    const {sortedBy} = this.state;
+    const { sortedBy } = this.state;
 
     return (
       <table className="todo-table">
-        <thead>
-          <tr>
-            <td>
-              <div className="todo-table__head">
-                <div>
-                  User
-                </div>
-                <button
-                  onClick={() => this.setSortDirection('user')}
-                  className="button-sort"
-                >
-                  Sort
-                </button>
-              </div>
-            </td>
-
-            <td>
-              <div className="todo-table__head">
-                <div>
-                  Todo
-                </div>
-                <button
-                  onClick={() => this.setSortDirection('todo')}
-                  className="button-sort"
-                >
-                  Sort
-                </button>
-              </div>
-            </td>
-
-            <td>
-              <div className="todo-table__head">
-                <div>
-                  State
-                </div>
-                <button
-                  onClick={() => this.setSortDirection('state')}
-                  className="button-sort"
-                >
-                  Sort
-                </button>
-              </div>
-            </td>
-          </tr>
-        </thead>
         <tbody>
-          <TodoList todos={todos} users={users} sortedBy={sortedBy} />
+          <tr>
+            <th
+              className="todo-table__head"
+              onClick={() => this.setSortDirection('user')}
+            >
+              User
+            </th>
+
+            <th
+              className="todo-table__head"
+              onClick={() => this.setSortDirection('todo')}
+            >
+              Todo
+            </th>
+
+            <th
+              className="todo-table__head"
+              onClick={() => this.setSortDirection('state')}
+            >
+              State
+            </th>
+          </tr>
+          
+          <TodoList data={this.props} sortedBy={sortedBy} />
         </tbody>
       </table>
     );
   };
 };
 
+TodoTable.propTypes = {
+  todos: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
+}
 
 export default TodoTable;
