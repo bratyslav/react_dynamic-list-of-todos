@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { getData } from './getData';
-import TodoList from './TodoList';
+import TodoTable from './TodoTable';
 
 class App extends Component {
   state = {
@@ -28,7 +28,7 @@ class App extends Component {
       <div>
         {
           loaded
-          ? <TodoList todos={todoList} />
+          ? <TodoTable todos={todoList} />
           : <button
             className="load-button"
             onClick={this.setData}
